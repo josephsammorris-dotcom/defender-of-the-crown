@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Defender of the Crown — Two Lords</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/tv.css">
+  <script type="importmap">
+    { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+</head>
+<body>
+  <canvas id="view"></canvas>
+
+  <header id="topbar" class="hidden">
+    <div class="lord" id="lord0"></div>
+    <div class="season"><div id="seasonText">Season 1</div><div id="phaseText">Muster</div></div>
+    <div class="lord right" id="lord1"></div>
+  </header>
+
+  <aside id="chronicle" class="hidden"><h3>Chronicle</h3><ul id="log"></ul></aside>
+  <div id="miniHud" class="hidden"></div>
+
+  <section id="lobby" class="overlay">
+    <div class="parchment">
+      <h1>Defender <small>of the</small> Crown</h1>
+      <p class="tag">Two lords. One throne. Join on your phone.</p>
+      <div class="join">
+        <div id="qr"></div>
+        <div class="join-text">
+          <div>Open on your phone:</div>
+          <div id="joinUrl" class="url"></div>
+          <div class="code-label">Room code</div>
+          <div id="roomCode" class="code">····</div>
+        </div>
+      </div>
+      <div class="slots" id="slots"></div>
+      <p class="hint">Both lords press <b>Ready</b> on their phone to begin.</p>
+    </div>
+  </section>
+
+  <section id="gameover" class="overlay hidden">
+    <div class="parchment">
+      <h1 id="winTitle">Long live the King!</h1>
+      <p id="winText"></p>
+      <p class="hint">Press <b>Play again</b> on a phone, or N here, to start a new campaign.</p>
+    </div>
+  </section>
+
+  <section id="clickToStart" class="overlay">
+    <div class="parchment small"><h2>Raise the banners</h2><p>Click anywhere to begin (enables sound).</p></div>
+  </section>
+
+  <div id="status" class="status">Connecting…</div>
+  <script type="module" src="/js/tv.js"></script>
+</body>
+</html>

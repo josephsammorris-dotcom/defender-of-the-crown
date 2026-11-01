@@ -1,0 +1,23 @@
+{
+  "name": "defender-of-the-crown",
+  "version": "1.0.0",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "test": "node test/sim.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "qrcode-generator": "^1.4.4",
+    "three": "^0.160.0",
+    "wrangler": "^4.156.0",
+    "ws": "^8.22.1"
+  },
+  "type": "module",
+  "private": true
+}
