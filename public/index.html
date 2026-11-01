@@ -2,11 +2,12 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
   <title>Defender of the Crown — Two Lords</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/tv.css">
+  <link rel="stylesheet" href="/css/controls.css">
   <script type="importmap">
     { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
   </script>
@@ -23,11 +24,64 @@
 
   <aside id="chronicle" class="hidden"><h3>Chronicle</h3><ul id="log"></ul></aside>
   <div id="miniHud" class="hidden"></div>
+  <div id="pads" class="hidden"></div>
 
-  <section id="lobby" class="overlay">
+  <!-- On-device side panel: the same controls the phones show -->
+  <aside id="panel" class="hidden">
+    <div id="panelHead"><span id="panelName"></span><span id="panelGold"></span></div>
+    <div id="panelBody" class="ctrl-root"></div>
+  </aside>
+
+  <section id="pass" class="overlay hidden">
+    <div class="parchment small">
+      <div class="pass-label">Pass the device to</div>
+      <h1 id="passName">—</h1>
+      <p id="passHouse"></p>
+      <p class="hint">Your rival should look away while you give your orders.</p>
+      <button class="menu-btn big" id="passBtn">I'm ready</button>
+    </div>
+  </section>
+
+  <section id="menu" class="overlay">
     <div class="parchment">
       <h1>Defender <small>of the</small> Crown</h1>
-      <p class="tag">Two lords. One throne. Join on your phone.</p>
+      <p class="tag">England has no king. Raise your banner.</p>
+      <div id="menuMain">
+        <button id="continueBtn" class="menu-btn big hidden">Continue campaign</button>
+        <div class="choices">
+          <div class="choice">
+            <h2>Play on this device</h2>
+            <p>Keyboard, mouse or touch. Two players share the screen.</p>
+            <div class="btns"><button class="menu-btn" data-local="1">1 player</button><button class="menu-btn" data-local="2">2 players</button></div>
+          </div>
+          <div class="choice">
+            <h2>Play with phones</h2>
+            <p>This screen is the board; phones are the controllers.</p>
+            <div class="btns"><button class="menu-btn" data-phones="1">1 player</button><button class="menu-btn" data-phones="2">2 players</button></div>
+          </div>
+        </div>
+        <p class="hint">In 1-player games you face Baron Reginald, a computer lord.</p>
+      </div>
+      <div id="menuSetup" class="hidden">
+        <h2 id="setupTitle"></h2>
+        <div class="names">
+          <label style="--house:#c0392b"><span>House of Wolf</span><input id="name0" type="text" maxlength="16" placeholder="Your name"></label>
+          <label style="--house:#2e6fb5" id="name1Wrap"><span>House of Stag</span><input id="name1" type="text" maxlength="16" placeholder="Rival's name"></label>
+        </div>
+        <div id="diffWrap" class="diff">
+          <span>Baron Reginald fights like</span>
+          <div class="seg" id="diffSeg"><button data-diff="easy">a squire</button><button data-diff="normal" class="on">a knight</button><button data-diff="hard">a champion</button></div>
+        </div>
+        <div id="keysHelp"></div>
+        <div class="btns"><button class="menu-btn alt" id="backBtn">Back</button><button class="menu-btn" id="beginBtn">Begin the campaign</button></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="lobby" class="overlay hidden">
+    <div class="parchment">
+      <h1>Defender <small>of the</small> Crown</h1>
+      <p class="tag">Join on your phone.</p>
       <div class="join">
         <div id="qr"></div>
         <div class="join-text">
@@ -37,8 +91,12 @@
           <div id="roomCode" class="code">····</div>
         </div>
       </div>
+      <div class="lobby-opts">
+        <div class="seg" id="humansSeg"><button data-humans="1">1 player</button><button data-humans="2">2 players</button></div>
+        <div class="seg" id="lobbyDiffSeg"><button data-diff="easy">Squire</button><button data-diff="normal">Knight</button><button data-diff="hard">Champion</button></div>
+      </div>
       <div class="slots" id="slots"></div>
-      <p class="hint">Both lords press <b>Ready</b> on their phone to begin.</p>
+      <p class="hint">Every lord presses <b>Ready</b> on their phone to begin.</p>
     </div>
   </section>
 
@@ -46,15 +104,18 @@
     <div class="parchment">
       <h1 id="winTitle">Long live the King!</h1>
       <p id="winText"></p>
-      <p class="hint">Press <b>Play again</b> on a phone, or N here, to start a new campaign.</p>
+      <p class="hint" id="overHint">Press <b>Play again</b> on a phone to start a new campaign.</p>
+      <div class="btns" id="overBtns"><button class="menu-btn alt" id="overMenu">Main menu</button><button class="menu-btn" id="overAgain">Play again</button></div>
     </div>
   </section>
 
-  <section id="clickToStart" class="overlay">
-    <div class="parchment small"><h2>Raise the banners</h2><p>Click anywhere to begin (enables sound).</p></div>
+  <section id="clickToStart" class="overlay hidden">
+    <div class="parchment small"><h2>Raise the banners</h2><p>Click anywhere to rejoin the room (enables sound).</p></div>
   </section>
 
-  <div id="status" class="status">Connecting…</div>
+  <button id="menuCorner" class="corner hidden" title="Main menu">☰ Menu</button>
+  <div id="toast" class="toast hidden"></div>
+  <div id="status" class="status"></div>
   <script type="module" src="/js/tv.js"></script>
 </body>
 </html>

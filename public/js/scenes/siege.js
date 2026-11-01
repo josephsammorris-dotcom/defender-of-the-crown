@@ -3,9 +3,10 @@ import { PLAYERS } from '../shared/map.js';
 import { addLights, box, cyl, cone, makeTower, makeBanner, disposeTree, mat } from './common.js';
 
 // Physics (world units): catapult at z = 30, wall plane at z = 0, wall height 8, four 10-wide sections.
-const G = 9.8, WALL_H = 8, CAT_Z = 30, SECTION_W = 10;
-const SIEGE_MS = 75000, REPAIR_COOLDOWN = 5000, REPAIR_AMOUNT = 12, DIRECT = 25, SPLASH = 10;
-const SECTION_NAMES = ['West wall', 'Gatehouse', 'Great hall wall', 'East wall'];
+export const G = 9.8, WALL_H = 8, CAT_Z = 30, SECTION_W = 10;
+export const SIEGE_MS = 75000, REPAIR_COOLDOWN = 5000;
+export const REPAIR_AMOUNT = 12; const DIRECT = 25, SPLASH = 10;
+export const SECTION_NAMES = ['West wall', 'Gatehouse', 'Great hall wall', 'East wall'];
 
 export class SiegeScene {
   constructor(mini, ctx) {

@@ -30,9 +30,9 @@ with sync_playwright() as p:
     tv.on('console', lambda m: m.type == 'error' and errors.append('TV: ' + m.text))
     tv.on('pageerror', lambda e: errors.append('TV pageerror: ' + str(e)))
     tv.goto(BASE + '/')
+    tv.click('[data-phones="2"]')
     tv.wait_for_function("location.search.includes('room=')")
     room = tv.evaluate("new URLSearchParams(location.search).get('room')")
-    tv.click('#clickToStart')
     time.sleep(1)
     tv.screenshot(path=f'{OUT}/01-lobby.png')
 

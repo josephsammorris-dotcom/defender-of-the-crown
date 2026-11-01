@@ -176,6 +176,15 @@ export class MapScene {
     this.arrows.children.forEach((c) => { if (c.material?.emissiveIntensity !== undefined) c.material.emissiveIntensity = 0.3 + Math.sin(this.time * 5) * 0.2; });
   }
 
-  resize(w, h) { this.camera.aspect = w / h; this.camera.updateProjectionMatrix(); }
+  // avail = the part of the screen not covered by a panel; England is framed to fit inside it.
+  resize(w, h, avail = { w, h }) {
+    this.camera.aspect = w / h;
+    const k = (h / avail.h) * Math.max(1, (0.9 * avail.h) / avail.w);
+    this.camera.position.set(-1.3, 17.2 * k, -0.6 + 9.8 * k);
+    this.camera.lookAt(-1.3, 0, -0.6);
+    this.scene.fog.near = 22 * k; this.scene.fog.far = 40 * k;
+    this.camera.far = 100 * k;
+    this.camera.updateProjectionMatrix();
+  }
   dispose() { disposeTree(this.scene); }
 }

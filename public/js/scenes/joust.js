@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import { PLAYERS } from '../shared/map.js';
 import { addLights, makeKnight, box, cyl, cone, makeBanner, disposeTree } from './common.js';
 
-const CHARGE_MS = 3000;
+export const CHARGE_MS = 3000;
 const COUNTDOWN_MS = 2200;
-const HIT_WINDOW = 260, GLANCE_WINDOW = 600;
+export const HIT_WINDOW = 260, GLANCE_WINDOW = 600;
 
 function grade(release) {
   if (release === null || release === undefined) return { pts: 0, word: 'never lowered' };

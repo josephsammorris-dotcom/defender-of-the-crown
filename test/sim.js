@@ -3,10 +3,12 @@
 import WebSocket from 'ws';
 import { ADJACENCY, COSTS } from '../public/js/shared/map.js';
 
-const BASE = process.argv[2] || 'http://localhost:8787';
+const args = process.argv.slice(2);
+const HUMANS = args.includes('--one') ? 1 : 2;
+const BASE = args.find((a) => a.startsWith('http')) || 'http://localhost:8787';
 const WS = BASE.replace(/^http/, 'ws');
 const { room } = await (await fetch(`${BASE}/api/new`)).json();
-console.log('room', room);
+console.log('room', room, 'humans', HUMANS);
 
 function client(hello) {
   const ws = new WebSocket(`${WS}/ws?room=${room}`);
@@ -23,7 +25,10 @@ function client(hello) {
 }
 
 const tv = client({ role: 'tv' });
-const phones = [client({ role: 'phone', token: 'tokA', name: 'Alice' }), client({ role: 'phone', token: 'tokB', name: 'Bob' })];
+tv.ws.on('open', () => setTimeout(() => tv.send({ type: 'config', humans: HUMANS, difficulty: 'hard' }), 50));
+await new Promise((r) => setTimeout(r, 300));
+const phones = [client({ role: 'phone', token: 'tokA', name: 'Alice' })];
+if (HUMANS === 2) phones.push(client({ role: 'phone', token: 'tokB', name: 'Bob' }));
 const rnd = (n) => Math.floor(Math.random() * n);
 let lastMini = 0, lastActed = {};
 const minis = {};
@@ -86,6 +91,7 @@ const timer = setInterval(() => {
   const st = tv.state;
   if (st?.phase === 'over' || Date.now() > deadline) {
     clearInterval(timer);
+    console.log('players', st?.players.map((p) => `${p.name}${p.ai ? ' (AI)' : ''}`).join(' vs '));
     console.log('phase', st?.phase, 'season', st?.season, 'winner', st?.winner, '-', st?.winReason);
     console.log('minigames played', minis);
     console.log('mini', JSON.stringify(st?.mini), 'queue?');console.log('last log:\n  ' + st?.log.slice(-6).join('\n  '));

@@ -3,12 +3,12 @@ import { PLAYERS } from '../shared/map.js';
 import { addLights, makeKnight, box, cyl, cone, makeBanner, disposeTree } from './common.js';
 
 const DUEL_MS = 60000;
-const MOVES = {
+export const MOVES = {
   high: { windup: 350, recover: 300, dmg: 10, height: 'high' },
   low: { windup: 350, recover: 300, dmg: 10, height: 'low' },
   thrust: { windup: 800, recover: 600, dmg: 25, height: 'mid' },
 };
-const STAGGER = 450;
+export const STAGGER = 450;
 
 export class DuelScene {
   constructor(mini, ctx) {
@@ -22,17 +22,19 @@ export class DuelScene {
 
     const avg = (mini.hp[0] + mini.hp[1]) / 2;
     this.dmgScale = avg / 100;
-    this.fighters = mini.players.map((slot, i) => {
+    // Fighters are indexed by slot: Wolf (slot 0) always stands on the left, Stag on the right.
+    this.fighters = [0, 1].map((slot) => {
+      const i = mini.players.indexOf(slot);
       const k = makeKnight(PLAYERS[slot].color);
-      const dir = i === 0 ? 1 : -1;
+      const dir = slot === 0 ? 1 : -1;
       k.group.position.set(-2 * dir, 0, 0);
-      k.group.rotation.y = i === 0 ? 0 : Math.PI;
+      k.group.rotation.y = slot === 0 ? 0 : Math.PI;
       this.scene.add(k.group);
       return {
         slot, k, dir,
         hp: mini.hp[i], max: mini.hp[i],
         guard: 'high', state: 'idle', move: null, t: 0, flash: 0, knock: 0,
-        speed: this.finale && i === 1 ? 0.85 : 1, // the lord of the keep strikes faster
+        speed: this.finale && slot === mini.defender ? 0.85 : 1, // the lord of the keep strikes faster
       };
     });
     this.elapsed = 0;
@@ -197,7 +199,7 @@ export class DuelScene {
     }
     if (this.phase === 'done' && this.timer > 3500 && !this.sent) {
       this.sent = true;
-      this.ctx.finish({ winner: this.winnerSlot, hpFrac: this.fighters.map((f) => Math.max(0, f.hp) / f.max) });
+      this.ctx.finish({ winner: this.winnerSlot, hpFrac: this.mini.players.map((slot) => Math.max(0, this.fighters[slot].hp) / this.fighters[slot].max) });
     }
   }
 
